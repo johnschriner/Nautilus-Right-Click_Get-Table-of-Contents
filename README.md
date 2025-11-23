@@ -1,24 +1,27 @@
 # GetMagazineTOC — Magazine Table-of-Contents Extractor (WIP)
 
-A fast, local, right-click tool that extracts a clean, Calibre-friendly table of contents from magazine PDFs. It targets The New Yorker, The Atlantic, and Harper’s Magazine first—but is designed to be extensible to other periodicals.
+A fast, local, right-click tool that extracts a clean, Calibre-friendly table of contents from magazine PDFs.
+It targets The New Yorker, The Atlantic, and Harper’s Magazine first — but is designed to be extensible to
+other periodicals.
 
-Status: work in progress. Harper’s support is improving; New Yorker and Atlantic are solid for most issues. OCR + robust parsing paths are included.
+Status: work in progress. Harper’s support is improving; New Yorker and Atlantic are solid for most issues.
+OCR + robust parsing paths are included.
 
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
 ## What it does
 
-- Auto-detects brand from filename/early pages (NYer / Atlantic / Harper’s); defaults to “auto.”
+- Auto-detects brand from filename/early pages (NYer / Atlantic / Harper's); defaults to "auto".
 - Extracts ToC from the first N pages using pdftotext (-layout, with -raw fallback).
 - OCR fallback for image-only or sparse PDFs (first N pages via pdftoppm + tesseract).
 - Brand-specific parsing:
   - The New Yorker: section headings (e.g., PERSONAL HISTORY, THE CRITICS), titles, authors, pages.
   - The Atlantic: sections + features with page numbers.
-  - Harper’s: section headers like “LETTERS    2”, plus multiple item patterns; avoids Harper’s Index/Findings bleed-through.
-- Nice plain-text output (non-markdown) designed to paste into Calibre notes/Comments.
-- Verbose mode to see exactly what’s happening (commands run, sections detected, fallbacks).
+  - Harper's: section headers like "LETTERS    2", plus multiple item patterns; avoids Harper's Index/Findings bleed-through.
+- Plain-text output (non-markdown) designed to paste into Calibre notes/Comments.
+- Verbose mode to see exactly what's happening (commands run, sections detected, fallbacks).
 
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
 ## Requirements
 
@@ -26,14 +29,14 @@ System packages (Ubuntu/Debian):
   sudo apt install -y poppler-utils tesseract-ocr tesseract-ocr-eng zenity libnotify-bin
 
 Python:
-- Works with the system Python 3.10+ (tested on 3.12).
-- No third-party pip deps required.
+- Works with system Python 3.10+ (tested on 3.12).
+- No third-party pip dependencies required.
 
 Recommended venv:
   python3 -m venv ~/.venvs/nautilus-pdf
   ~/.venvs/nautilus-pdf/bin/python -m pip install --upgrade pip
 
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
 ## Installation (Nautilus right-click)
 
@@ -56,9 +59,9 @@ Recommended venv:
 5) Restart Nautilus:
   nautilus -q
 
-Now right-click any PDF → Scripts → GetMagazineTOC.
+Now right-click any PDF -> Scripts -> GetMagazineTOC.
 
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
 ## CLI usage
 
@@ -78,7 +81,7 @@ Key flags:
 - --json                  emit JSON instead of plain text (for scripting)
 - --out PATH              write output to a file (otherwise prints to stdout)
 
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
 ## Output (example, plain text)
 
@@ -89,30 +92,62 @@ PERSONAL HISTORY (p. 20)
 • Transitions (p. 20) — James Marcus
 
 TAKES (p. 25)
-• Nick Paumgarten’s “Up and Then Down.” (p. 25) — Ed Caesar
+• Nick Paumgarten's "Up and Then Down." (p. 25) — Ed Caesar
 
 (Exact details depend on the issue and detected patterns.)
 
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
 ## Troubleshooting
 
-- “Silent” right-click: check the log at ~/.cache/get_mag_toc.log
+- "Silent" right-click: check the log at ~/.cache/get_mag_toc.log
 - Sparse/garbled text: try increasing --ocr-first or --pages
-- Harper’s only shows one line: some lines are split across wraps; see roadmap (two-line joiner)
+- Harper's only shows one line: some lines are split across wraps; see roadmap (two-line joiner)
 - Missing binaries: ensure pdftotext, pdftoppm, and tesseract are installed and on PATH
 - Brand mis-detected: pass --brand harpers|newyorker|atlantic explicitly to compare behavior
 
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
 ## Roadmap
 
-- Harper’s two-line joiner: fuse title-only line + following page-number line before matching
+- Harper's two-line joiner: fuse title-only line + following page-number line before matching
 - Block-scoped parsing: collect lines under each section and match with multiple tolerant patterns
-- Brand auto-detect++: prefer filename → page-1 text → OCR page-1 text
+- Brand auto-detect++: prefer filename -> page-1 text -> OCR page-1 text
 - Generic mode for other periodicals with learnable patterns
 - Unit test fixtures per brand/issue to prevent regressions
 - Structured exports: CSV/JSON with (section, title, author, page)
 
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
+## Suggested repo layout
+
+.
+├── GetMagazineTOC                  # Nautilus launcher (bash)
+├── scripts-support/
+│   └── get_mag_toc.py             # Core Python extractor
+├── README.md
+└── LICENSE
+
+--------------------------------------------------------------------------------
+
+## License
+
+MIT (suggested). Add your preferred license file.
+
+--------------------------------------------------------------------------------
+
+## Acknowledgements
+
+Uses:
+- Poppler (pdftotext, pdftoppm)
+- Tesseract OCR
+- GNOME tools (zenity, notify-send) for UX
+
+--------------------------------------------------------------------------------
+
+## Notes for contributors
+
+Parsing print PDFs is messy — magazines vary by issue and layout. If you hit a case that fails:
+- Run with --verbose and share the last 50–100 lines of stderr.
+- Include the brand, issue date, and a small redacted snippet of the "pdftotext -layout" output around the ToC page.
+- PRs with additional regex patterns + fixtures are very welcome.
