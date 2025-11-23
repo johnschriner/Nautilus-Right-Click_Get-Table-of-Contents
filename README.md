@@ -116,24 +116,3 @@ TAKES (p. 25)
 
 -------------------------------------------------------------------------------
 
-## License
-
-MIT (suggested). Add your preferred license file.
-
--------------------------------------------------------------------------------
-
-## Acknowledgements
-
-Uses:
-- Poppler (pdftotext, pdftoppm)
-- Tesseract OCR
-- GNOME tools (zenity, notify-send) for UX
-
--------------------------------------------------------------------------------
-
-## Notes for contributors
-
-Parsing print PDFs is messy—magazines vary by issue and layout. If you hit a case that fails:
-- Run with --verbose and share the last 50–100 lines of stderr.
-- Include the brand, issue date, and a small redacted snippet of the pdftotext -layout output around the ToC page.
-- PRs with additional regex patterns + fixtures are very welcome.
