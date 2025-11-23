@@ -20,17 +20,6 @@ Status: work in progress. Harper’s support is improving; New Yorker and Atlant
 
 -------------------------------------------------------------------------------
 
-## Repo layout (suggested)
-
-.
-├── GetMagazineTOC                  # Nautilus launcher (bash)</ b>
-├── scripts-support/</ b>
-│   └── get_mag_toc.py             # Core Python extractor</ b>
-├── README.md</ b>
-└── LICENSE</ b>
-</ b>
--------------------------------------------------------------------------------
-
 ## Requirements
 
 System packages (Ubuntu/Debian):
